@@ -17,7 +17,7 @@ class ReadNotify is TCPConnectionNotify
     let client = WriteNotify(conn)
     let notifier: ProcessNotify iso = consume client
     try
-      let path = FilePath(_env.root as AmbientAuth, "/bin/bash")
+      let path = FilePath(_env.root as AmbientAuth, "/bin/bash")?
       let args: Array[String] val = ["bash"]
       let vars: Array[String] val = ["HOME=/"; "PATH=/bin"]
       let auth = _env.root as AmbientAuth
@@ -43,8 +43,6 @@ class WriteNotify is ProcessNotify
   fun ref stderr(process: ProcessMonitor ref, data: Array[U8] iso) =>
     _conn.write(String.from_array(consume data))
 
-  fun ref failed(process: ProcessMonitor ref, err: ProcessError) =>
-    _conn.write(err.string())
 
 actor Main
   new create(env: Env) =>
